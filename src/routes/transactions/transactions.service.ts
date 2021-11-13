@@ -6,38 +6,38 @@ import { CreateTransactionDto } from './dto/create-transaction.dto';
 export class TransactionService {
   constructor(private readonly prisma: PrismaService) {}
   async create(transaction: CreateTransactionDto) {
-    const { id } = transaction.product;
+    const { productId, senderId, receiverId, amount } = transaction;
     const sender = await this.prisma.user.findUnique({
-      where: { id: transaction.senderId },
+      where: { id: senderId },
       include: { UserHasProduct: true },
     });
     if (!sender) {
       throw new HttpException(
         {
           status: HttpStatus.BAD_REQUEST,
-          error: `No sender user with id ${transaction.senderId}`,
+          error: `No sender user with id ${senderId}`,
         },
         HttpStatus.BAD_REQUEST,
       );
     }
     const sendingProduct = await sender.UserHasProduct.find(
-      (product) => product.productId === transaction.product.id,
+      (product) => product.productId === productId,
     );
     if (!sendingProduct) {
       throw new HttpException(
         {
           status: HttpStatus.BAD_REQUEST,
-          error: `Sending user doesnt have item id ${transaction.product.id}`,
+          error: `Sending user doesnt have item id ${productId}`,
         },
         HttpStatus.BAD_REQUEST,
       );
     }
-    if (sendingProduct.amount < transaction.amount) {
+    if (sendingProduct.amount < amount) {
       throw new HttpException(
         {
           status: HttpStatus.BAD_REQUEST,
           error: `Sending user doesnt have enough of this item, 
-                  sending: ${transaction.amount}, 
+                  sending: ${amount}, 
                   have: ${sendingProduct.amount}`,
         },
         HttpStatus.BAD_REQUEST,
@@ -45,7 +45,7 @@ export class TransactionService {
     }
 
     const receiver = await this.prisma.user.findUnique({
-      where: { id: transaction.receiverId },
+      where: { id: receiverId },
       include: { UserHasProduct: true },
     });
 
@@ -53,47 +53,47 @@ export class TransactionService {
       throw new HttpException(
         {
           status: HttpStatus.BAD_REQUEST,
-          error: `No receiver user with id ${transaction.receiverId}`,
+          error: `No receiver user with id ${receiverId}`,
         },
         HttpStatus.BAD_REQUEST,
       );
     }
 
     await this.prisma.user.update({
-      where: { id: transaction.senderId },
+      where: { id: senderId },
       data: {
         UserHasProduct: {
           update: {
             where: {
               userId_productId: {
-                productId: transaction.product.id,
-                userId: sender.id,
+                productId: productId,
+                userId: senderId,
               },
             },
             data: {
-              amount: sendingProduct.amount - transaction.amount,
+              amount: sendingProduct.amount - amount,
             },
           },
         },
       },
     });
     await this.prisma.user.update({
-      where: { id: transaction.receiverId },
+      where: { id: receiverId },
       data: {
         UserHasProduct: {
           upsert: {
             update: {
-              productId: transaction.product.id,
-              amount: { increment: transaction.amount },
+              productId: productId,
+              amount: { increment: amount },
             },
             create: {
-              productId: transaction.product.id,
-              amount: transaction.amount,
+              productId: productId,
+              amount: amount,
             },
             where: {
               userId_productId: {
-                userId: receiver.id,
-                productId: transaction.product.id,
+                userId: receiverId,
+                productId: productId,
               },
             },
           },
@@ -103,10 +103,37 @@ export class TransactionService {
 
     return this.prisma.transaction.create({
       data: {
-        productId: id,
-        receiverId: transaction.receiverId,
-        senderId: transaction.senderId,
-        amount: transaction.amount,
+        productId: productId,
+        receiverId: receiverId,
+        senderId: senderId,
+        amount: amount,
+      },
+    });
+  }
+
+  async give(transaction: CreateTransactionDto) {
+    const { productId, receiverId, amount } = transaction;
+    return this.prisma.user.update({
+      where: { id: receiverId },
+      data: {
+        UserHasProduct: {
+          upsert: {
+            update: {
+              productId: productId,
+              amount: { increment: amount },
+            },
+            create: {
+              productId: productId,
+              amount: amount,
+            },
+            where: {
+              userId_productId: {
+                userId: receiverId,
+                productId: productId,
+              },
+            },
+          },
+        },
       },
     });
   }

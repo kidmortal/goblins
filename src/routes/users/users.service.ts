@@ -18,7 +18,13 @@ export class UsersService {
   }
 
   findAll() {
-    return this.prisma.user.findMany({ include: { Products: true } });
+    return this.prisma.user.findMany({
+      include: {
+        UserHasProduct: { include: { product: true } },
+        boughtProducts: true,
+        soldProducts: true,
+      },
+    });
   }
 
   findOne(id: number) {

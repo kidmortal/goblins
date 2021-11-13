@@ -12,6 +12,10 @@ export class TransactionController {
   create(@Body() createTransactionDto: CreateTransactionDto) {
     return this.transactionService.create(createTransactionDto);
   }
+  @Post('give')
+  give(@Body() createTransactionDto: CreateTransactionDto) {
+    return this.transactionService.give(createTransactionDto);
+  }
 
   @Get()
   findAll() {
