@@ -13,7 +13,7 @@ import { UpdateListingDto } from './dto/update-listing.dto';
 import { ApiTags } from '@nestjs/swagger';
 
 @ApiTags('listings')
-@Controller('listings')
+@Controller('goblin/listings')
 export class ListingsController {
   constructor(private readonly listingsService: ListingsService) {}
 

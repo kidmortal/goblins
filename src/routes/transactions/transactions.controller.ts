@@ -4,7 +4,7 @@ import { CreateTransactionDto } from './dto/create-transaction.dto';
 import { ApiTags } from '@nestjs/swagger';
 
 @ApiTags('transactions')
-@Controller('transaction')
+@Controller('goblin/transaction')
 export class TransactionController {
   constructor(private readonly transactionService: TransactionService) {}
 

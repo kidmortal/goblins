@@ -14,7 +14,7 @@ async function bootstrap() {
     .addTag('goblins')
     .build();
   const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('api', app, document, {
+  SwaggerModule.setup('goblin', app, document, {
     customCss: SwaggerCss,
     customSiteTitle: 'Goblins API',
   });
