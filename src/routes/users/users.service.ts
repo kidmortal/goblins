@@ -7,14 +7,18 @@ import { UpdateUserDto } from './dto/update-user.dto';
 export class UsersService {
   constructor(private readonly prisma: PrismaService) {}
 
-  create(createUserDto: CreateUserDto) {
+  async create(createUserDto: CreateUserDto) {
+    const user = await this.prisma.user.findFirst({
+      where: { name: createUserDto.name },
+    });
+    if (user) return user;
     return this.prisma.user.create({
       data: { name: createUserDto.name, money: 0 },
     });
   }
 
   findAll() {
-    return this.prisma.user.findMany();
+    return this.prisma.user.findMany({ include: { Products: true } });
   }
 
   findOne(id: number) {
