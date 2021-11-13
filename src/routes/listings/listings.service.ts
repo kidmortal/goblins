@@ -66,6 +66,14 @@ export class ListingsService {
     });
   }
 
+  findAllPage(page = 0) {
+    return this.prisma.listing.findMany({
+      skip: page * 12,
+      take: 12,
+      orderBy: { createdAt: 'desc' },
+    });
+  }
+
   findOne(id: number) {
     return `This action returns a #${id} listing`;
   }

@@ -26,6 +26,10 @@ export class ListingsController {
   findAll() {
     return this.listingsService.findAll();
   }
+  @Get('page/:page')
+  findAllPage(@Param('page') page: string) {
+    return this.listingsService.findAllPage(+page);
+  }
 
   @Get(':id')
   findOne(@Param('id') id: string) {
