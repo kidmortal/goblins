@@ -61,7 +61,9 @@ export class ListingsService {
   }
 
   findAll() {
-    return this.prisma.listing.findMany();
+    return this.prisma.listing.findMany({
+      include: { product: true, seller: true },
+    });
   }
 
   findOne(id: number) {
