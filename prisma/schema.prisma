@@ -15,7 +15,7 @@ model Product {
   createdAt      DateTime         @default(now())
   updatedAt      DateTime         @updatedAt
   name           String           @unique @db.VarChar(255)
-  iconUrl        String           @default("") @db.VarChar(255)
+  iconUrl        String           @default("https://discordapp.com/assets/3e531d8e171629e9433db0bb431b2e12.svg") @db.VarChar(255)
   users          User[]
   Transaction    Transaction[]
   UserHasProduct UserHasProduct[]
