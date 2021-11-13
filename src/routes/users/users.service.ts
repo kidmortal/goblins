@@ -13,7 +13,7 @@ export class UsersService {
     });
     if (user) return user;
     return this.prisma.user.create({
-      data: { name: createUserDto.name, money: 0 },
+      data: { name: createUserDto.name, money: 100 },
     });
   }
 
@@ -21,8 +21,7 @@ export class UsersService {
     return this.prisma.user.findMany({
       include: {
         UserHasProduct: { include: { product: true } },
-        boughtProducts: true,
-        soldProducts: true,
+        Listing: true,
       },
     });
   }

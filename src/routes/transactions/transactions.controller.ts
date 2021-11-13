@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Param } from '@nestjs/common';
+import { Controller, Get, Post, Delete, Body, Param } from '@nestjs/common';
 import { TransactionService } from './transactions.service';
 import { CreateTransactionDto } from './dto/create-transaction.dto';
 import { ApiTags } from '@nestjs/swagger';
@@ -12,10 +12,6 @@ export class TransactionController {
   create(@Body() createTransactionDto: CreateTransactionDto) {
     return this.transactionService.create(createTransactionDto);
   }
-  @Post('give')
-  give(@Body() createTransactionDto: CreateTransactionDto) {
-    return this.transactionService.give(createTransactionDto);
-  }
 
   @Get()
   findAll() {
@@ -25,5 +21,9 @@ export class TransactionController {
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.transactionService.findOne(+id);
+  }
+  @Delete(':id')
+  delete(@Param('id') id: string) {
+    return this.transactionService.delete(+id);
   }
 }

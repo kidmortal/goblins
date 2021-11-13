@@ -15,9 +15,11 @@ model Product {
   createdAt      DateTime         @default(now())
   updatedAt      DateTime         @updatedAt
   name           String           @unique @db.VarChar(255)
+  iconUrl        String           @default("") @db.VarChar(255)
   users          User[]
   Transaction    Transaction[]
   UserHasProduct UserHasProduct[]
+  Listing        Listing[]
 }
 
 model User {
@@ -30,6 +32,7 @@ model User {
   soldProducts   Transaction[]    @relation("Sender")
   boughtProducts Transaction[]    @relation("Receiver")
   UserHasProduct UserHasProduct[]
+  Listing        Listing[]
 }
 
 model UserHasProduct {
@@ -47,10 +50,25 @@ model Transaction {
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
   amount     Int
-  senderId   Int
-  receiverId Int
   sender     User     @relation(fields: [senderId], references: [id], name: "Sender")
   receiver   User     @relation(fields: [receiverId], references: [id], name: "Receiver")
   product    Product  @relation(fields: [productId], references: [id])
+  listing    Listing  @relation(fields: [listingId], references: [id])
+  senderId   Int
+  receiverId Int
   productId  Int
+  listingId  Int
+}
+
+model Listing {
+  id          Int           @id @default(autoincrement())
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  amount      Int           @db.Integer
+  unitPrice   Int           @db.Integer
+  seller      User          @relation(fields: [sellerId], references: [id])
+  sellerId    Int
+  product     Product       @relation(fields: [productId], references: [id])
+  productId   Int
+  Transaction Transaction[]
 }
