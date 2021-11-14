@@ -19,6 +19,6 @@ async function bootstrap() {
     customSiteTitle: 'Goblins API',
   });
   app.enableCors();
-  await app.listen(8000);
+  await app.listen(process.env.PORT);
 }
 bootstrap();
