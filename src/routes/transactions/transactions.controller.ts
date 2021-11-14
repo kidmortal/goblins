@@ -23,7 +23,7 @@ export class TransactionController {
     return this.transactionService.findOne(+id);
   }
   @Delete(':id')
-  delete(@Param('id') id: string) {
-    return this.transactionService.delete(+id);
+  remove(@Param('id') id: string) {
+    return this.transactionService.remove(+id);
   }
 }

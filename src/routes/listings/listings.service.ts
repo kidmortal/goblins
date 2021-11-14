@@ -75,14 +75,17 @@ export class ListingsService {
   }
 
   findOne(id: number) {
-    return `This action returns a #${id} listing`;
+    return this.prisma.listing.findUnique({ where: { id } });
   }
 
   update(id: number, updateListingDto: UpdateListingDto) {
-    return `This action updates a #${id} listing`;
+    return this.prisma.listing.update({
+      where: { id },
+      data: updateListingDto,
+    });
   }
 
   remove(id: number) {
-    return `This action removes a #${id} listing`;
+    return this.prisma.listing.delete({ where: { id } });
   }
 }

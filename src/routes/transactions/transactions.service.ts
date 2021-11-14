@@ -14,7 +14,7 @@ export class TransactionService {
       throw new HttpException(
         {
           status: HttpStatus.BAD_REQUEST,
-          error: `No listing found for id id ${listingId}`,
+          error: `No listing found for id ${listingId}`,
         },
         HttpStatus.BAD_REQUEST,
       );
@@ -109,7 +109,7 @@ export class TransactionService {
   findOne(id: number) {
     return this.prisma.transaction.findUnique({ where: { id } });
   }
-  delete(id: number) {
+  remove(id: number) {
     return this.prisma.transaction.delete({ where: { id } });
   }
 }

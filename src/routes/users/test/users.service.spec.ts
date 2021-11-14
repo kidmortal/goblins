@@ -1,7 +1,5 @@
 import { Test } from '@nestjs/testing';
 import { PrismaService } from '../../../services/prisma.service';
-import { UsersController } from '../users.controller';
-import { UsersModule } from '../users.module';
 import { UsersService } from '../users.service';
 import { userStub } from './stubs/user.stub';
 
@@ -13,8 +11,6 @@ describe('UsersService', () => {
 
   beforeEach(async () => {
     const moduleRef = await Test.createTestingModule({
-      imports: [UsersModule],
-      controllers: [UsersController],
       providers: [UsersService, PrismaService],
     }).compile();
 
@@ -45,6 +41,11 @@ describe('UsersService', () => {
     });
   });
   describe('FindOne', () => {
+    it('Should call FindOne and return null if user doesnt exist', async () => {
+      const user = await usersService.findOne(0);
+      expect(prismaService.user.findUnique).toHaveBeenCalled();
+      expect(user).toBe(null);
+    });
     it('Should call FindOne function and return an value', async () => {
       const user = await usersService.findOne(userStub().id);
       expect(prismaService.user.findUnique).toHaveBeenCalled();
