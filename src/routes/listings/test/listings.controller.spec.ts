@@ -14,6 +14,7 @@ describe('ListingsController', () => {
 
   beforeEach(async () => {
     const moduleRef = await Test.createTestingModule({
+      imports: [ListingsModule],
       controllers: [ListingsController],
       providers: [ListingsService, PrismaService],
     }).compile();

@@ -1,6 +1,4 @@
 export const SwaggerCss = `
-
-
 .topbar-wrapper>.link>img {
     content:url("https://cdn.discordapp.com/emojis/559487542567632897.png?size=96") !important;
    }
