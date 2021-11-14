@@ -6,9 +6,9 @@ import { ProductsModule } from '../products.module';
 import { ProductsService } from '../products.service';
 import { productStub } from './stubs/product.stub';
 
-jest.mock('../users.service.ts');
+jest.mock('../products.service.ts');
 
-describe('UsersController', () => {
+describe('ProductsController', () => {
   let productsController: ProductsController;
   let productsService: ProductsService;
 
@@ -38,46 +38,52 @@ describe('UsersController', () => {
     });
   });
   describe('Find all', () => {
-    let users: User[];
+    let products: Product[];
     beforeEach(async () => {
-      users = await usersController.findAll();
+      products = await productsController.findAll();
     });
 
-    it('Should call findAll function', () => {
-      expect(usersService.findAll).toHaveBeenCalled();
+    it('Should call findAll function and return an array', () => {
+      expect(productsService.findAll).toHaveBeenCalled();
+      expect(products).toBeInstanceOf(Array);
+      expect(products[0].name).toBe(productStub().name);
     });
   });
   describe('Find One', () => {
-    let user: User;
+    let product: Product;
     beforeEach(async () => {
-      user = await usersController.findOne(String(userStub().id));
+      product = await productsController.findOne(String(productStub().id));
     });
 
-    it('Should call findOne function and return a user', () => {
-      expect(usersService.findOne).toHaveBeenCalledWith(userStub().id);
-      expect(user.id).toBe(userStub().id);
+    it('Should call findOne function and return a product', () => {
+      expect(productsService.findOne).toHaveBeenCalledWith(productStub().id);
+      expect(product.id).toBe(productStub().id);
     });
   });
   describe('Update One', () => {
-    let user: User;
+    let product: Product;
     beforeEach(async () => {
-      user = await usersController.update(String(userStub().id), {});
+      product = await productsController.update(String(productStub().id), {
+        name: productStub().name,
+      });
     });
 
-    it('Should call Update function and return the updated user', () => {
-      expect(usersService.update).toHaveBeenCalledWith(userStub().id, {});
-      expect(user.id).toBe(userStub().id);
+    it('Should call Update function and return the updated product', () => {
+      expect(productsService.update).toHaveBeenCalledWith(productStub().id, {
+        name: productStub().name,
+      });
+      expect(product.id).toBe(productStub().id);
     });
   });
   describe('Remove One', () => {
-    let user: User;
+    let product: Product;
     beforeEach(async () => {
-      user = await usersController.remove(String(userStub().id));
+      product = await productsController.remove(String(productStub().id));
     });
 
-    it('Should call Remove function and return the removed user', () => {
-      expect(usersService.remove).toHaveBeenCalledWith(userStub().id);
-      expect(user.id).toBe(userStub().id);
+    it('Should call Remove function and return the removed product', () => {
+      expect(productsService.remove).toHaveBeenCalledWith(productStub().id);
+      expect(product.id).toBe(productStub().id);
     });
   });
 });

@@ -46,9 +46,9 @@ describe('UsersService', () => {
   });
   describe('FindOne', () => {
     it('Should call FindOne function and return an value', async () => {
-      const users = await usersService.findOne(userStub().id);
+      const user = await usersService.findOne(userStub().id);
       expect(prismaService.user.findUnique).toHaveBeenCalled();
-      expect(users[0].id).toBe(userStub().id);
+      expect(user.id).toBe(userStub().id);
     });
   });
   describe('Update', () => {
