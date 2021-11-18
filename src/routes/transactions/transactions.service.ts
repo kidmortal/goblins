@@ -54,6 +54,16 @@ export class TransactionService {
       );
     }
 
+    if (receiver.id === listing.sellerId) {
+      throw new HttpException(
+        {
+          status: HttpStatus.BAD_REQUEST,
+          error: `User cant buy his own listing`,
+        },
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
     await this.prisma.listing.update({
       where: { id: listingId },
       data: {
