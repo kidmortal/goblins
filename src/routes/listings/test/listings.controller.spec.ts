@@ -26,18 +26,24 @@ describe('ListingsController', () => {
 
   describe('Create', () => {
     it('Should call create function with name params and return a value', async () => {
-      const listing = await listingsController.create({
-        amount: 1,
-        unitPrice: 1,
-        sellerId: 1,
-        productId: 1,
-      });
-      expect(listingsService.create).toBeCalledWith({
-        amount: 1,
-        unitPrice: 1,
-        sellerId: 1,
-        productId: 1,
-      });
+      const listing = await listingsController.create(
+        { user: { id: 1 } },
+        {
+          amount: 1,
+          unitPrice: 1,
+          sellerId: 1,
+          productId: 1,
+        },
+      );
+      expect(listingsService.create).toBeCalledWith(
+        {
+          amount: 1,
+          unitPrice: 1,
+          sellerId: 1,
+          productId: 1,
+        },
+        { id: 1 },
+      );
       expect(listing.productId).toBe(listingStub().productId);
     });
   });

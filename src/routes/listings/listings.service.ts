@@ -1,5 +1,10 @@
 import { User } from '.prisma/client';
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import {
+  HttpException,
+  HttpStatus,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { PrismaService } from '../../services/prisma.service';
 import { CreateListingDto } from './dto/create-listing.dto';
 import { UpdateListingDto } from './dto/update-listing.dto';
@@ -8,6 +13,11 @@ import { UpdateListingDto } from './dto/update-listing.dto';
 export class ListingsService {
   constructor(private readonly prisma: PrismaService) {}
   async create(createListingDto: CreateListingDto, authUser: User) {
+    if (authUser.id !== createListingDto.sellerId) {
+      throw new UnauthorizedException(
+        `You are not authenticated as user id ${createListingDto.sellerId}`,
+      );
+    }
     const { sellerId, amount, productId } = createListingDto;
     const seller = await this.prisma.user.findUnique({
       where: { id: sellerId },

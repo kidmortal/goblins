@@ -26,11 +26,17 @@ describe('UsersController', () => {
   describe('Create', () => {
     let user: User;
     beforeEach(async () => {
-      user = await usersController.create({ name: userStub().name });
+      user = await usersController.create({
+        name: userStub().name,
+        password: userStub().password,
+      });
     });
 
     it('Should call create function with name params and return a value', () => {
-      expect(usersService.create).toBeCalledWith({ name: userStub().name });
+      expect(usersService.create).toBeCalledWith({
+        name: userStub().name,
+        password: userStub().password,
+      });
       expect(user.name).toBe(userStub().name);
     });
   });

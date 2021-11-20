@@ -20,15 +20,24 @@ describe('UsersService', () => {
   });
 
   describe('Create', () => {
-    it('Should call create function with name params and return a value', async () => {
-      const user = await usersService.create({ name: 'none' });
-      expect(prismaService.user.findFirst).toHaveBeenCalled();
-      expect(prismaService.user.create).not.toHaveBeenCalled();
-      expect(user.name).toBe(userStub().name);
+    it('Should throw error if there is a user with the selected name', async () => {
+      let throwError = false;
+      let errorName = '';
+      try {
+        await usersService.create({
+          name: 'John Snow',
+          password: '123',
+        });
+      } catch (error) {
+        throwError = true;
+        errorName = error.response.error;
+      }
+      expect(throwError).toBe(true);
+      expect(errorName).toBe(`Username John Snow is already being used`);
     });
-    it('Should call create function with name params and create new user if doesnt exist', async () => {
-      const user = await usersService.create({ name: 'none' });
-      expect(prismaService.user.findFirst).toHaveBeenCalled();
+    it('Should be able to create a user if there isnt anyone with the selected name', async () => {
+      const user = await usersService.create({ name: 'none', password: '123' });
+      expect(prismaService.user.findUnique).toHaveBeenCalled();
       expect(prismaService.user.create).toHaveBeenCalled();
       expect(user.name).toBe(userStub().name);
     });

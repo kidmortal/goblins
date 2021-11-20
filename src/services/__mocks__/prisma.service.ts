@@ -5,20 +5,12 @@ import { usersStub, userStub } from '../../routes/users/test/stubs/user.stub';
 
 export const PrismaService = jest.fn().mockReturnValue({
   user: {
-    findFirst: jest.fn().mockReturnValueOnce(userStub()).mockReturnValue(null),
     findUnique: jest.fn((param) => {
       const id = param.where.id;
-      switch (id) {
-        case 0:
-          return null;
-        case 1:
-          return userStub();
-        case 2:
-          return usersStub[1];
-
-        default:
-          break;
-      }
+      const name = param?.where?.name;
+      if (id) return usersStub.find((user) => user.id === id);
+      if (name) return usersStub.find((user) => user.name === name);
+      return null;
     }),
     findMany: jest.fn().mockReturnValue([userStub()]),
     create: jest.fn().mockResolvedValue(userStub()),

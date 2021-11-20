@@ -1,4 +1,5 @@
 import { Test } from '@nestjs/testing';
+import { createUser, usersStub } from '../../users/test/stubs/user.stub';
 import { PrismaService } from '../../../services/prisma.service';
 import { UpdateListingDto } from '../dto/update-listing.dto';
 import { ListingsService } from '../listings.service';
@@ -21,16 +22,41 @@ describe('ListingsService', () => {
   });
 
   describe('Create', () => {
-    it('Should throw error when user doesnt exist', async () => {
+    it('Should throw error when user is not authenticated', async () => {
+      const user = createUser({ id: 50 });
       let throwError = false;
       let errorName = '';
       try {
-        await listingsService.create({
-          amount: 1,
-          productId: 1,
-          sellerId: 99,
-          unitPrice: 1,
-        });
+        await listingsService.create(
+          {
+            amount: 1,
+            productId: 2,
+            sellerId: 1,
+            unitPrice: 1,
+          },
+          user,
+        );
+      } catch (error) {
+        throwError = true;
+        errorName = error.response.error;
+      }
+      expect(throwError).toBe(true);
+      expect(errorName).toBe(`Unauthorized`);
+    });
+    it('Should throw error when user doesnt exist', async () => {
+      const user = createUser({ id: 99 });
+      let throwError = false;
+      let errorName = '';
+      try {
+        await listingsService.create(
+          {
+            amount: 1,
+            productId: 1,
+            sellerId: 99,
+            unitPrice: 1,
+          },
+          user,
+        );
       } catch (error) {
         throwError = true;
         errorName = error.response.error;
@@ -39,15 +65,19 @@ describe('ListingsService', () => {
       expect(errorName).toBe(`No user found for id 99`);
     });
     it('Should throw error when listing amount is higher than owned amount', async () => {
+      const user = usersStub[0];
       let throwError = false;
       let errorName = '';
       try {
-        await listingsService.create({
-          amount: 10,
-          productId: 1,
-          sellerId: 1,
-          unitPrice: 1,
-        });
+        await listingsService.create(
+          {
+            amount: 10,
+            productId: 1,
+            sellerId: 1,
+            unitPrice: 1,
+          },
+          user,
+        );
       } catch (error) {
         throwError = true;
         errorName = error.response.error;
@@ -58,15 +88,19 @@ describe('ListingsService', () => {
       );
     });
     it('Should throw error when user doesnt have the product', async () => {
+      const user = usersStub[0];
       let throwError = false;
       let errorName = '';
       try {
-        await listingsService.create({
-          amount: 1,
-          productId: 2,
-          sellerId: 1,
-          unitPrice: 1,
-        });
+        await listingsService.create(
+          {
+            amount: 1,
+            productId: 2,
+            sellerId: 1,
+            unitPrice: 1,
+          },
+          user,
+        );
       } catch (error) {
         throwError = true;
         errorName = error.response.error;
@@ -74,13 +108,17 @@ describe('ListingsService', () => {
       expect(throwError).toBe(true);
       expect(errorName).toBe(`User doesn't have product id 2`);
     });
-    it('Should call create a listing and return it', async () => {
-      const listing = await listingsService.create({
-        amount: 1,
-        productId: 1,
-        sellerId: 1,
-        unitPrice: 1,
-      });
+    it('Should create a listing and return it', async () => {
+      const user = usersStub[0];
+      const listing = await listingsService.create(
+        {
+          amount: 1,
+          productId: 1,
+          sellerId: 1,
+          unitPrice: 1,
+        },
+        user,
+      );
       expect(prismaService.listing.create).toHaveBeenCalled();
       expect(listing.productId).toBe(listingStub().productId);
     });

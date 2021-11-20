@@ -27,16 +27,22 @@ describe('TransactionsController', () => {
 
   describe('Create', () => {
     it('Should call create function with name params and return a value', async () => {
-      const transaction = await transactionsController.create({
-        amount: 1,
-        listingId: 1,
-        receiverId: 1,
-      });
-      expect(transactionsService.create).toBeCalledWith({
-        amount: 1,
-        listingId: 1,
-        receiverId: 1,
-      });
+      const transaction = await transactionsController.create(
+        { user: { id: 1 } },
+        {
+          amount: 1,
+          listingId: 1,
+          receiverId: 1,
+        },
+      );
+      expect(transactionsService.create).toBeCalledWith(
+        {
+          amount: 1,
+          listingId: 1,
+          receiverId: 1,
+        },
+        { id: 1 },
+      );
       expect(transaction.listingId).toBe(transactionStub().productId);
     });
   });
