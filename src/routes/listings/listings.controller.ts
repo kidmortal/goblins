@@ -6,20 +6,24 @@ import {
   Patch,
   Param,
   Delete,
+  UseGuards,
+  Request,
 } from '@nestjs/common';
 import { ListingsService } from './listings.service';
 import { CreateListingDto } from './dto/create-listing.dto';
 import { UpdateListingDto } from './dto/update-listing.dto';
 import { ApiTags } from '@nestjs/swagger';
+import { JwtAuthGuard } from '../auth/shared/jwt-auth.guard';
 
 @ApiTags('listings')
 @Controller('goblin/listings')
 export class ListingsController {
   constructor(private readonly listingsService: ListingsService) {}
 
+  @UseGuards(JwtAuthGuard)
   @Post()
-  create(@Body() createListingDto: CreateListingDto) {
-    return this.listingsService.create(createListingDto);
+  create(@Request() req: any, @Body() createListingDto: CreateListingDto) {
+    return this.listingsService.create(createListingDto, req.user);
   }
 
   @Get()

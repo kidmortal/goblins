@@ -1,3 +1,4 @@
+import { User } from '.prisma/client';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { PrismaService } from '../../services/prisma.service';
 import { CreateListingDto } from './dto/create-listing.dto';
@@ -6,7 +7,7 @@ import { UpdateListingDto } from './dto/update-listing.dto';
 @Injectable()
 export class ListingsService {
   constructor(private readonly prisma: PrismaService) {}
-  async create(createListingDto: CreateListingDto) {
+  async create(createListingDto: CreateListingDto, authUser: User) {
     const { sellerId, amount, productId } = createListingDto;
     const seller = await this.prisma.user.findUnique({
       where: { id: sellerId },

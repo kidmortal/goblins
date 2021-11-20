@@ -1,11 +1,22 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { User } from '.prisma/client';
+import {
+  HttpException,
+  HttpStatus,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { PrismaService } from '../../services/prisma.service';
 import { CreateTransactionDto } from './dto/create-transaction.dto';
 
 @Injectable()
 export class TransactionService {
   constructor(private readonly prisma: PrismaService) {}
-  async create(transaction: CreateTransactionDto) {
+  async create(transaction: CreateTransactionDto, authUser: User) {
+    if (authUser.id !== transaction.receiverId) {
+      throw new UnauthorizedException(
+        `You are not authenticated as user id ${transaction.receiverId}`,
+      );
+    }
     const { listingId, receiverId, amount } = transaction;
     const listing = await this.prisma.listing.findUnique({
       where: { id: listingId },
