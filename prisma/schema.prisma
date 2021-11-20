@@ -27,6 +27,7 @@ model User {
   createdAt      DateTime         @default(now())
   updatedAt      DateTime         @updatedAt
   name           String           @unique @db.VarChar(50)
+  password       String           @default("") @db.VarChar(50)
   money          Int              @db.Integer
   iconUrl        String           @default("https://cdn.discordapp.com/attachments/878253814493360148/909105162898006026/software-crystal-msn.png")
   Products       Product[]

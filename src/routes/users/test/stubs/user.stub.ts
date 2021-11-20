@@ -32,5 +32,6 @@ export const userStub = (): User & {
     name: 'John Doe',
     money: 1,
     UserHasProduct: [{ amount: 1, productId: 1, userId: 1 }],
+    password: '123',
   };
 };

@@ -36,6 +36,10 @@ export class UsersService {
     });
   }
 
+  findByName(name: string) {
+    return this.prisma.user.findUnique({ where: { name } });
+  }
+
   update(id: number, updateUserDto: UpdateUserDto) {
     return this.prisma.user.update({ where: { id }, data: updateUserDto });
   }
