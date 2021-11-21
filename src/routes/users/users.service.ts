@@ -21,7 +21,7 @@ export class UsersService {
       );
     }
     return this.prisma.user.create({
-      data: { name: createUserDto.name, money: 100 },
+      data: { ...createUserDto, money: 100 },
     });
   }
 
