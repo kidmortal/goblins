@@ -7,12 +7,18 @@ import { TransactionModule } from './routes/transactions/transactions.module';
 import { ListingsModule } from './routes/listings/listings.module';
 import { AuthModule } from './routes/auth/auth.module';
 import { join } from 'path';
+import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
+import { APP_GUARD } from '@nestjs/core';
 
 @Module({
   imports: [
     GraphQLModule.forRoot({
       include: [UsersModule],
       autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
+    }),
+    ThrottlerModule.forRoot({
+      ttl: 5,
+      limit: 10,
     }),
     ProductsModule,
     UsersModule,
@@ -21,6 +27,6 @@ import { join } from 'path';
     AuthModule,
   ],
   controllers: [],
-  providers: [PrismaService],
+  providers: [PrismaService, { provide: APP_GUARD, useClass: ThrottlerGuard }],
 })
 export class AppModule {}
