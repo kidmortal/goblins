@@ -34,6 +34,20 @@ export class UsersService {
     });
   }
 
+  giveProductToUser(productId: number, amount: number, userId: number) {
+    return this.prisma.userHasProduct.upsert({
+      where: { userId_productId: { productId, userId } },
+      create: {
+        amount,
+        productId,
+        userId,
+      },
+      update: {
+        amount: { increment: amount },
+      },
+    });
+  }
+
   findOne(id: number) {
     return this.prisma.user.findUnique({
       where: { id },

@@ -6,12 +6,16 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { PrismaService } from '../../services/prisma.service';
+import { UsersService } from '../users/users.service';
 import { CreateListingDto } from './dto/create-listing.dto';
 import { UpdateListingDto } from './dto/update-listing.dto';
 
 @Injectable()
 export class ListingsService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly users: UsersService,
+  ) {}
   async create(createListingDto: CreateListingDto, authUser: User) {
     if (authUser.id !== createListingDto.sellerId) {
       throw new UnauthorizedException(
@@ -74,6 +78,12 @@ export class ListingsService {
   findAll() {
     return this.prisma.listing.findMany({
       include: { product: true, seller: true },
+      orderBy: { createdAt: 'desc' },
+      where: {
+        amount: {
+          gt: 0,
+        },
+      },
     });
   }
 
@@ -82,6 +92,11 @@ export class ListingsService {
       skip: page * 12,
       take: 12,
       orderBy: { createdAt: 'desc' },
+      where: {
+        amount: {
+          gt: 0,
+        },
+      },
     });
   }
 
@@ -96,7 +111,13 @@ export class ListingsService {
     });
   }
 
-  remove(id: number) {
-    return this.prisma.listing.delete({ where: { id } });
+  async remove(id: number) {
+    const listing = await this.prisma.listing.findUnique({ where: { id } });
+    await this.users.giveProductToUser(
+      listing.productId,
+      listing.amount,
+      listing.sellerId,
+    );
+    return this.prisma.listing.update({ where: { id }, data: { amount: 0 } });
   }
 }
