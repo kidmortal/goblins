@@ -7,3 +7,15 @@ export function DiscordEmbedError(message: string) {
     .setTimestamp();
   return embedMessage;
 }
+
+export function isValidHttpUrl(string) {
+  let url;
+
+  try {
+    url = new URL(string);
+  } catch (_) {
+    return false;
+  }
+
+  return true;
+}

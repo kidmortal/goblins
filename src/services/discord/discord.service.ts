@@ -1,7 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { Client, Intents, Message, MessageEmbed } from 'discord.js';
 import { PrismaService } from '../prisma.service';
-import { DiscordEmbedError } from './discord.utils';
+import { DiscordEmbedError, isValidHttpUrl } from './discord.utils';
 
 @Injectable()
 export class DiscordService {
@@ -21,7 +21,8 @@ export class DiscordService {
   }
 
   async CommandHandler(message: Message<boolean>) {
-    switch (message.content.toLowerCase()) {
+    const params = message.content.toLowerCase().split(' ');
+    switch (params[0]) {
       case 'oi':
         message.reply('gay');
         break;
@@ -32,6 +33,12 @@ export class DiscordService {
 
       case 'info':
         this.GetUserInfo(message);
+        break;
+      case 'changeimage':
+        this.ChangeUserImageUrl(message);
+        break;
+      case 'changemoney':
+        this.ChangeTargetUserMoney(message);
         break;
 
       default:
@@ -91,10 +98,54 @@ export class DiscordService {
       .addFields(
         { name: 'Name', value: `Nome: ${user.name}` },
         { name: 'Money', value: `💵 Money: ${user.money}` },
-        { name: 'Inventory', value: products },
+        { name: 'Inventory', value: products || 'Sem itens' },
       )
       .setTimestamp();
 
     return message.reply({ embeds: [embedMessage] });
+  }
+  async ChangeUserImageUrl(message: Message<boolean>) {
+    const params = message.content.split(' ');
+    const url = params[1];
+    const { id } = message.author;
+    if (!url)
+      return message.reply({ embeds: [DiscordEmbedError('Informe uma URL')] });
+
+    if (!isValidHttpUrl(url)) {
+      return message.reply({ embeds: [DiscordEmbedError('URL invalida')] });
+    }
+    const user = await this.prisma.user.findFirst({
+      where: { discordId: id },
+    });
+    if (!user)
+      return message.reply({
+        embeds: [DiscordEmbedError('Usuario não registrado')],
+      });
+
+    await this.prisma.user.update({
+      where: { id: user.id },
+      data: { iconUrl: url },
+    });
+
+    return message.reply('alterado!');
+  }
+  async ChangeTargetUserMoney(message: Message<boolean>) {
+    const params = message.content.split(' ');
+    const target = params[1].replace('<@!', '').replace('>', '');
+    const newValue = Number(params[2]);
+
+    const user = await this.prisma.user.findFirst({
+      where: { discordId: target },
+    });
+
+    if (user && newValue) {
+      await this.prisma.user.update({
+        where: { id: user.id },
+        data: {
+          money: newValue,
+        },
+      });
+      message.reply('ok!');
+    }
   }
 }
