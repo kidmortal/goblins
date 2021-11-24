@@ -9,6 +9,7 @@ import { AuthModule } from './routes/auth/auth.module';
 import { join } from 'path';
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 import { APP_GUARD } from '@nestjs/core';
+import { DiscordService } from './services/discord/discord.service';
 
 @Module({
   imports: [
@@ -27,6 +28,10 @@ import { APP_GUARD } from '@nestjs/core';
     AuthModule,
   ],
   controllers: [],
-  providers: [PrismaService, { provide: APP_GUARD, useClass: ThrottlerGuard }],
+  providers: [
+    PrismaService,
+    DiscordService,
+    { provide: APP_GUARD, useClass: ThrottlerGuard },
+  ],
 })
 export class AppModule {}
