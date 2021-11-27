@@ -8,6 +8,7 @@ import { jwtConstants } from '../auth/shared/constants';
 import { JwtStrategy } from '../auth/shared/jwt.strategy';
 import { LocalStrategy } from '../auth/shared/local.strategy';
 import { AuthController } from './auth.controller';
+import { GoogleStrategy } from './shared/google.strategy';
 
 @Module({
   imports: [
@@ -21,8 +22,9 @@ import { AuthController } from './auth.controller';
   providers: [
     AuthService,
     LocalStrategy,
-    PrismaService,
     JwtStrategy,
+    GoogleStrategy,
+    PrismaService,
     UsersService,
   ],
 })

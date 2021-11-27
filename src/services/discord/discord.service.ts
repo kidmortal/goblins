@@ -1,5 +1,14 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { Client, Intents, Message, MessageEmbed } from 'discord.js';
+import {
+  Client,
+  Intents,
+  Message,
+  MessageActionRow,
+  MessageButton,
+  MessageEmbed,
+  MessageSelectMenu,
+  MessageSelectOptionData,
+} from 'discord.js';
 import { PrismaService } from '../prisma.service';
 import { DiscordEmbedError, isValidHttpUrl } from './discord.utils';
 
@@ -17,6 +26,16 @@ export class DiscordService {
     });
     this.bot.on('message', (message) => {
       this.CommandHandler(message);
+    });
+    this.bot.on('interactionCreate', async (interaction) => {
+      if (!interaction.isSelectMenu()) return;
+
+      if (interaction.customId === 'select-product') {
+        await interaction.update({
+          content: 'Itens postados no market!',
+          components: [],
+        });
+      }
     });
   }
 
@@ -39,6 +58,9 @@ export class DiscordService {
         break;
       case 'changemoney':
         this.ChangeTargetUserMoney(message);
+        break;
+      case 'sell':
+        this.PostItemMarket(message);
         break;
 
       default:
@@ -75,6 +97,43 @@ export class DiscordService {
 
     return message.reply({ embeds: [embedMessage] });
   }
+  async PostItemMarket(message: Message<boolean>) {
+    const user = await this.prisma.user.findFirst({
+      where: { discordId: message.author.id },
+      include: {
+        Listing: {
+          where: { amount: { gt: 0 } },
+          include: {
+            product: true,
+          },
+        },
+      },
+    });
+    if (!user)
+      return message.reply({
+        embeds: [DiscordEmbedError('Usuario nao cadastrado')],
+      });
+    const listings: MessageSelectOptionData[] = [];
+    user.Listing.forEach((list) => {
+      listings.push({
+        label: String(list.id),
+        description: list.product.name.slice(0, 20),
+        value: String(list.id),
+      });
+    });
+    const productRow = new MessageActionRow().addComponents(
+      new MessageSelectMenu()
+        .setCustomId('select-product')
+        .setPlaceholder('Escolha o item')
+        .setMaxValues(listings.length)
+        .addOptions(listings),
+    );
+
+    return message.reply({
+      content: 'Escolha o item para vender',
+      components: [productRow],
+    });
+  }
   async GetUserInfo(message: Message<boolean>) {
     const user = await this.prisma.user.findFirst({
       where: { discordId: message.author.id },
@@ -102,7 +161,15 @@ export class DiscordService {
       )
       .setTimestamp();
 
-    return message.reply({ embeds: [embedMessage] });
+    const row = new MessageActionRow().addComponents(
+      new MessageButton()
+        .setCustomId('primary')
+        .setLabel('Sexo bixo')
+        .setEmoji('664124616897200130')
+        .setStyle('PRIMARY'),
+    );
+
+    return message.reply({ embeds: [embedMessage], components: [row] });
   }
   async ChangeUserImageUrl(message: Message<boolean>) {
     const params = message.content.split(' ');

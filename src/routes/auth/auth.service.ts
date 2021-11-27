@@ -23,4 +23,14 @@ export class AuthService {
       access_token: this.jwtService.sign(user),
     };
   }
+
+  googleLogin(req) {
+    if (!req.user) {
+      return 'no user from google';
+    }
+    return {
+      message: 'user info from google',
+      user: req.user,
+    };
+  }
 }
