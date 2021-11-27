@@ -9,6 +9,7 @@ import { JwtStrategy } from '../auth/shared/jwt.strategy';
 import { LocalStrategy } from '../auth/shared/local.strategy';
 import { AuthController } from './auth.controller';
 import { GoogleStrategy } from './shared/google.strategy';
+import { DiscordStrategy } from './shared/discord.strategy';
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { GoogleStrategy } from './shared/google.strategy';
     LocalStrategy,
     JwtStrategy,
     GoogleStrategy,
+    DiscordStrategy,
     PrismaService,
     UsersService,
   ],

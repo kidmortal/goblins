@@ -30,4 +30,16 @@ export class AuthController {
   async googleAuthRedirect(@Req() req) {
     return this.authService.googleLogin(req);
   }
+
+  @Get('/discord')
+  @UseGuards(AuthGuard('discord'))
+  async discordAuth(@Req() req) {
+    return 'lol';
+  }
+
+  @Get('/discord/callback')
+  @UseGuards(AuthGuard('discord'))
+  async discordAuthRedirect(@Req() req) {
+    return this.authService.discordLogin(req);
+  }
 }

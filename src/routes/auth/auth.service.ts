@@ -33,4 +33,13 @@ export class AuthService {
       user: req.user,
     };
   }
+  discordLogin(req) {
+    if (!req.user) {
+      return 'no user from discord';
+    }
+    return {
+      message: 'user info from discord',
+      user: req.user,
+    };
+  }
 }
