@@ -33,13 +33,15 @@ export class AuthService {
       user: req.user,
     };
   }
-  discordLogin(req) {
-    if (!req.user) {
-      return 'no user from discord';
+  async discordLogin(req) {
+    const user = await this.usersService.findByDiscordId(req.user.id);
+    const { password, ...rest } = user;
+    if (!user) {
+      return 'No user registered for this discord account';
     }
     return {
-      message: 'user info from discord',
-      user: req.user,
+      access_token: this.jwtService.sign(rest),
+      user: rest,
     };
   }
 }

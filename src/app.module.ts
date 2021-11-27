@@ -10,6 +10,7 @@ import { join } from 'path';
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 import { APP_GUARD } from '@nestjs/core';
 import { DiscordService } from './services/discord/discord.service';
+import { SendGridModule } from '@anchan828/nest-sendgrid';
 
 @Module({
   imports: [
@@ -20,6 +21,9 @@ import { DiscordService } from './services/discord/discord.service';
     ThrottlerModule.forRoot({
       ttl: 5,
       limit: 10,
+    }),
+    SendGridModule.forRoot({
+      apikey: process.env.SENDGRID_API_KEY,
     }),
     ProductsModule,
     UsersModule,

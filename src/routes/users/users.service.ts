@@ -61,6 +61,12 @@ export class UsersService {
   findByName(name: string) {
     return this.prisma.user.findUnique({ where: { name } });
   }
+  findByEmail(email: string) {
+    return this.prisma.user.findFirst({ where: { email } });
+  }
+  findByDiscordId(discordId: string) {
+    return this.prisma.user.findFirst({ where: { discordId } });
+  }
 
   update(id: number, updateUserDto: UpdateUserDto) {
     return this.prisma.user.update({ where: { id }, data: updateUserDto });

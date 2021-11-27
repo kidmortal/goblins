@@ -10,6 +10,7 @@ import { LocalStrategy } from '../auth/shared/local.strategy';
 import { AuthController } from './auth.controller';
 import { GoogleStrategy } from './shared/google.strategy';
 import { DiscordStrategy } from './shared/discord.strategy';
+import { MailerService } from 'src/services/mailer/mailer.service';
 
 @Module({
   imports: [
@@ -28,6 +29,7 @@ import { DiscordStrategy } from './shared/discord.strategy';
     DiscordStrategy,
     PrismaService,
     UsersService,
+    MailerService,
   ],
 })
 export class AuthModule {}

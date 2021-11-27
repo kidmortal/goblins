@@ -84,6 +84,7 @@ export const userStub = (): User & {
     id: 1,
     name: 'John Doe',
     money: 1,
+    email: 'johndoe@john.com',
     UserHasProduct: [{ amount: 1, productId: 1, userId: 1 }],
     password: '123',
     discordId: '',

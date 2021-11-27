@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE "User" ADD COLUMN     "email" VARCHAR(80) NOT NULL DEFAULT E'';

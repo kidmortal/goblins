@@ -22,6 +22,8 @@
     "test:e2e": "jest --config ./test/jest-e2e.json"
   },
   "dependencies": {
+    "@anchan828/nest-sendgrid": "^0.5.22",
+    "@nestjs-modules/mailer": "^1.6.0",
     "@nestjs/common": "^8.0.0",
     "@nestjs/core": "^8.0.0",
     "@nestjs/graphql": "^9.1.1",
@@ -39,11 +41,13 @@
     "class-validator": "^0.13.1",
     "discord.js": "^13.3.1",
     "graphql": "^15",
+    "nodemailer": "^6.7.2",
     "passport": "^0.5.0",
     "passport-discord": "^0.1.4",
     "passport-google-oauth20": "^2.0.0",
     "passport-jwt": "^4.0.0",
     "passport-local": "^1.0.0",
+    "pug": "^3.0.2",
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",
     "rxjs": "^7.2.0",
