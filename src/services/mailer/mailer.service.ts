@@ -13,4 +13,20 @@ export class MailerService {
       html: 'we love <strong>YOU</strong>',
     });
   }
+  async sendCustomStringMessage(to: string, title: string, message: string) {
+    return this.sendGrid.send({
+      to,
+      from: 'kidmortal2@gmail.com',
+      subject: title,
+      text: message,
+    });
+  }
+  async sendCustomHTMLMessage(to: string, title: string, HTML: string) {
+    return this.sendGrid.send({
+      to,
+      from: 'kidmortal2@gmail.com',
+      subject: title,
+      html: HTML,
+    });
+  }
 }
