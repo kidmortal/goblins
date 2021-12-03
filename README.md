@@ -1,73 +1,90 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo_text.svg" width="320" alt="Nest Logo" /></a>
-</p>
+Backend for a small market project called Goblins market.
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+This back end was made using Nestjs and prisma + postgresql.
 
-## Description
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+This project has swagger, so you can easily see what routes are available and how to use each of them.
 
-## Installation
+![image](https://user-images.githubusercontent.com/18023467/144631676-2e6e8a70-8eb3-4e76-8c46-40d6594c59c7.png)
 
-```bash
-$ npm install
-```
 
-## Running the app
+Including authentication with Google, discord or the usual username + password.
 
-```bash
-# development
-$ npm run start
 
-# watch mode
-$ npm run start:dev
+Creating user -
 
-# production mode
-$ npm run start:prod
-```
+route: /goblin/user
 
-## Test
+body:
 
-```bash
-# unit tests
-$ npm run test
+![image](https://user-images.githubusercontent.com/18023467/144632142-5e74de92-39dd-4135-9375-5f4cfe4d4b49.png)
 
-# e2e tests
-$ npm run test:e2e
+response: 
 
-# test coverage
-$ npm run test:cov
-```
+![image](https://user-images.githubusercontent.com/18023467/144632198-3b7a530a-4e15-43b7-b6e0-b466887169fb.png)
 
-## Support
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+you can alter the user iconUrl using the patch method.
 
-## Stay in touch
+This method needs authentication, so makes sure you provide the JWT token on the headers.
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
 
-## License
+Creating product - 
 
-Nest is [MIT licensed](LICENSE).
+route: goblin/product
+
+body:
+
+![image](https://user-images.githubusercontent.com/18023467/144632425-cad56df1-f40d-4522-befc-d4d34a3bf0dc.png)
+
+response: 
+
+![image](https://user-images.githubusercontent.com/18023467/144632565-87142170-dc89-4bf5-a7db-9b19b90fe06c.png)
+
+
+The product itself doesnt need anything else.
+
+Login with name and password -
+
+route: goblin/auth
+
+body: ![image](https://user-images.githubusercontent.com/18023467/144633229-d5c19fb2-7773-47b9-97b5-11e02c66e5bc.png)
+
+response: ![image](https://user-images.githubusercontent.com/18023467/144633244-366a334e-231b-4ea7-a458-581d1a52a89e.png)
+
+
+Thats the token you gonna need for making any requests for this user (like listing for buying stuff)
+
+
+Creating transaction - 
+
+Thats where everything happens, in order to any user receive a product, it must be through a transaction.
+For creating a transaction, there must be a listing on the market, and the user also need to have enough money for buying it.
+
+route: goblin/transaction
+
+body:
+
+![image](https://user-images.githubusercontent.com/18023467/144632927-bb6b6de2-c010-4cca-b6cd-3734142bf8ea.png)
+
+
+If you havent authenticated, this is gonna happen.
+
+![image](https://user-images.githubusercontent.com/18023467/144632996-f75d79a4-9e24-4c6d-bcac-d24122b1ce7a.png)
+
+Or if you are authenticated but trying to buy with someone's id.
+
+![image](https://user-images.githubusercontent.com/18023467/144633589-a3d13cd3-b395-46d7-80a4-276c420f5e3e.png)
+
+
+
+But besides auth, there are multiple ways to end up with an error. such as
+
+![image](https://user-images.githubusercontent.com/18023467/144633480-4fc70c5f-5539-488d-88c0-eae779a29738.png)
+
+
+So make sure the transaction you are trying to create is valid.
+
+
+
