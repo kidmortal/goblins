@@ -12,7 +12,7 @@ This project has swagger, so you can easily see what routes are available and ho
 Including authentication with Google, discord or the usual username + password.
 
 
-Creating user -
+## Creating user 
 
 route: /goblin/user
 
@@ -30,7 +30,7 @@ you can alter the user iconUrl using the patch method.
 This method needs authentication, so makes sure you provide the JWT token on the headers.
 
 
-Creating product - 
+## Creating product 
 
 route: goblin/product
 
@@ -45,7 +45,7 @@ response:
 
 The product itself doesnt need anything else.
 
-Login with name and password -
+## Login with name and password 
 
 route: goblin/auth
 
@@ -57,7 +57,7 @@ response: ![image](https://user-images.githubusercontent.com/18023467/144633244-
 Thats the token you gonna need for making any requests for this user (like listing for buying stuff)
 
 
-Creating transaction - 
+## Creating transaction 
 
 Thats where everything happens, in order to any user receive a product, it must be through a transaction.
 For creating a transaction, there must be a listing on the market, and the user also need to have enough money for buying it.
@@ -87,4 +87,22 @@ But besides auth, there are multiple ways to end up with an error. such as
 So make sure the transaction you are trying to create is valid.
 
 
+
+## Creating listing
+
+Just like the transaction, you gonna need to be authenticated in order to list anything.
+Also have enough amount and stuff like that, but dont worry, 
+if by any chance you dont have enough, you gonna receive an error telling whats wrong with you request.
+
+route: goblin/listings
+
+body: ![image](https://user-images.githubusercontent.com/18023467/144634026-9129b3fc-3d69-4543-9536-3aba73f89a0c.png)
+
+
+After creating a listing, the owner will lose the selected amount and product, and the offer will be available for anyone to buy it (excluding the listing owner of course)
+
+But you can cancel your listing simply by doing the DELETE method on this route.
+
+
+Just make sure you have your token on hands.
 
