@@ -16,13 +16,9 @@ Including authentication with Google, discord or the usual username + password.
 
 route: /goblin/user
 
-body:
+body: ![image](https://user-images.githubusercontent.com/18023467/144632142-5e74de92-39dd-4135-9375-5f4cfe4d4b49.png)
 
-![image](https://user-images.githubusercontent.com/18023467/144632142-5e74de92-39dd-4135-9375-5f4cfe4d4b49.png)
-
-response: 
-
-![image](https://user-images.githubusercontent.com/18023467/144632198-3b7a530a-4e15-43b7-b6e0-b466887169fb.png)
+response: ![image](https://user-images.githubusercontent.com/18023467/144632198-3b7a530a-4e15-43b7-b6e0-b466887169fb.png)
 
 
 you can alter the user iconUrl using the patch method.
@@ -34,13 +30,9 @@ This method needs authentication, so makes sure you provide the JWT token on the
 
 route: goblin/product
 
-body:
+body: ![image](https://user-images.githubusercontent.com/18023467/144632425-cad56df1-f40d-4522-befc-d4d34a3bf0dc.png)
 
-![image](https://user-images.githubusercontent.com/18023467/144632425-cad56df1-f40d-4522-befc-d4d34a3bf0dc.png)
-
-response: 
-
-![image](https://user-images.githubusercontent.com/18023467/144632565-87142170-dc89-4bf5-a7db-9b19b90fe06c.png)
+response: ![image](https://user-images.githubusercontent.com/18023467/144632565-87142170-dc89-4bf5-a7db-9b19b90fe06c.png)
 
 
 The product itself doesnt need anything else.
@@ -64,9 +56,7 @@ For creating a transaction, there must be a listing on the market, and the user 
 
 route: goblin/transaction
 
-body:
-
-![image](https://user-images.githubusercontent.com/18023467/144632927-bb6b6de2-c010-4cca-b6cd-3734142bf8ea.png)
+body: ![image](https://user-images.githubusercontent.com/18023467/144632927-bb6b6de2-c010-4cca-b6cd-3734142bf8ea.png)
 
 
 If you havent authenticated, this is gonna happen.
